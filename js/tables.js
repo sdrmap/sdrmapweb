@@ -1,35 +1,37 @@
 //Tabulator Planelist
 var table = new Tabulator("#planelist", {
-	layout:"fitDataFill",
+	layout:"fitColumns",
 	placeholder:"No Data Set",
 	height:"100%",
-	rowClick:function(e, row){
-		planeSelect(row["_row"]["data"]["hex"]);
-	},
 	rowFormatter:function(row){
 			row.getElement().classList.add("listType_" + row["_row"]["data"]["type"]);
 		},
-	initialSort:[
-		{column:"flight",dir:"asc"}
-	],
 	columns:[
 		{title:"Hex", field:"hex", sorter:"string"},
-		{title:"Flight", field:"flight", sorter:"string", sorterParams: { alignEmptyValues:"bottom" }},
+		{title:"Reg", field:"registration", sorter:"string", sorterParams: { alignEmptyValues:"bottom" }},
+		{title:"Flight", field:"flight", sorter:"string", sorterParams: { alignEmptyValues:"bottom" }, widthGrow: 2 },
 		{title:"Alt", field:"altitude", sorter:"number", sorterParams: { alignEmptyValues:"bottom", thousandSeparator:".", decimalSeparator:"," }},
 		{title:"<i class='fas fa-tachometer-alt' title='Speed (km/h)'></i>", field:"speed", sorter:"number"},
-		{title:"<i class='fas fa-location-arrow' title='direction'></i>", field:"track", sorter:"number"},
-		{title:"<i class='fas fa-map-marker' title='Fix'></i>", field:"fix", sorter:"string",formatter:"html"},
+//		{title:"<i class='fas fa-location-arrow' title='direction'></i>", field:"track", sorter:"number"},
+		{title:"<i class='fas fa-map-marker' title='Fix'></i>", field:"fix", sorter:"string",formatter:"html", maxWidth: 1},
+	],
+	initialSort:[
+		{column:"flight",dir:"asc"},
+		{column:"fix",dir:"asc"},
 	],
 });
 
+table.on(
+	"rowClick", function(e, row){
+		planeSelect(row["_row"]["data"]["hex"]);
+	}
+);
+
 //Tabulator shiplist
 var shipsTable = new Tabulator("#shiplist", {
-	layout:"fitDataFill",
+	layout:"fitColumns",
 	placeholder:"No Data Set",
 	height:"100%",
-	rowClick:function(e, row){
-		shipSelect(row["_row"]["data"]["mmsi"]);
-	},
 	rowFormatter:function(row){
 			row.getElement().classList.add("listType_" + row["_row"]["data"]["type"]);
 		},
@@ -37,116 +39,82 @@ var shipsTable = new Tabulator("#shiplist", {
 		{column:"name",dir:"asc"}
 	],
 	columns:[
-		{title:"MMSI", field:"mmsi", sorter:"string"},
-		{title:"Name", field:"name", sorter:"string", sorterParams: { alignEmptyValues:"bottom" }},
+		{title:"MMSI", field:"mmsi", sorter:"string", minWidth: 90},
+		{title:"Name", field:"name", sorter:"string", sorterParams: { alignEmptyValues:"bottom" }, widthGrow: 2},
 		{title:"Call", field:"callsign", sorter:"string", sorterParams: { alignEmptyValues:"bottom" }},
-		{title:"Speed", field:"speed", sorter:"number"},
+		//{title:"Speed", field:"speed", sorter:"number"},
+		{title:"<i class='fas fa-map-marker' title='Fix'></i>", field:"fix", sorter:"string",formatter:"html", maxWidth: 1},
 	],
 });
+
+shipsTable.on(
+	"rowClick", function(e, row){
+		shipSelect(row["_row"]["data"]["mmsi"]);
+	}
+);
 
 //Tabulator PlaneHistoryList
 var planesHistoryTable = new Tabulator("#planeHistoryList", {
 	layout:"fitDataStretch",
 	placeholder:"Loading...",
 	height:"100%",
-	rowClick:function(e, row){
-		planeSelect(row["_row"]["data"]["hex"], true);
-	},
 	initialSort:[
 		{column:"flight",dir:"asc"}
 	],
 	columns:[
 		{title:"Hex", field:"hex", sorter:"string"},
+		{title:"Reg", field:"registration", sorter:"string", sorterParams: { alignEmptyValues:"bottom" }},
 		{title:"Flight", field:"flight", sorter:"string", sorterParams: { alignEmptyValues:"bottom" }},
 		{title:"Seen", field:"seen", sorter:"string"},
 	],
 });
 
+planesHistoryTable.on(
+	"rowClick", function(e, row){
+		planeSelect(row["_row"]["data"]["hex"], true);
+	}
+);
+
+function zeroFormatter(cell) {
+	if(typeof cell.getValue() === "undefined") {
+		return "0";
+	} else {
+		return cell.getValue();
+	}
+}
+
 //Tabulator stationlist
 var stationTable = new Tabulator("#stationlist", {
-	layout:"fitDataFill",
+	layout:"fitColumns",
 	placeholder:"No Data Set",
 	height:"100%",
 	//ajaxURL:"data/station.json",
-	rowClick:function(e, row){
-		stationSelect(row["_row"]["data"]["name"]);
-	},
 	initialSort:[
 		{column:"name",dir:"asc"}
 	],
 	columns:[
-		{title:"Station", field:"name", sorter:"string", width:180},
-		{title:"<i class='fas fa-plane'></i>", field:"planes", sorter:"number"},
-		{title:"<i class='fas fa-map-pin'></i>", field:"positions", sorter:"number"},
-		{title:"<i class='fas fa-compass'></i>", field:"mlat", sorter:"number"},
-		{title:"<i class='fas fa-clock'></i>", field:"seen", sorter:"string"},
+		{title:"Station", field:"name", sorter:"string", widthGrow: 5},
+		{title:"<i class='fas fa-plane'></i>", field:"planes", sorter:"number", sorterParams: { alignEmptyValues:"bottom" }, headerSortStartingDir:"desc", formatter: (cell) => this.zeroFormatter(cell), hozAlign:"right" },
+		{title:"<i class='fas fa-map-pin'></i>", field:"positions", sorter:"number", sorterParams: { alignEmptyValues:"bottom" }, headerSortStartingDir:"desc", formatter: (cell) => this.zeroFormatter(cell), hozAlign:"right"},
+		{title:"<i class='fas fa-compass', style='color: white !important'></i>", field:"mlat", sorter:"number", sorterParams: { alignEmptyValues:"bottom" }, headerSortStartingDir:"desc", formatter: (cell) => this.zeroFormatter(cell), hozAlign:"right"},
+		{title:"<i class='fas fa-ship'></i>", field:"ships", sorter:"number", sorterParams: { alignEmptyValues:"bottom" }, headerSortStartingDir:"desc", formatter: (cell) => this.zeroFormatter(cell), hozAlign:"right"},
+		{title:"<i class='fas fa-clock'></i>", field:"seen", sorter:"string", formatter:"html", maxWidth: 1, hozAlign:"right"},
 	],
 });
 
-//Tabulator planeStations
-var planeStationsTable = new Tabulator("#planeStations", {
-	layout:"fitColumns",
-	height:"500px",
-	placeholder:"No Data Set",
-	//Only a fixed height allows the surrounding div to be set to overflow auto/scroll without sideeffects
-	rowClick:function(e, row){
+stationTable.on(
+	"rowClick", function(e, row){
 		stationSelect(row["_row"]["data"]["name"]);
-	},
-	initialSort:[
-		{column:"name",dir:"asc"}
-	],
-	columns:[
-		{title:"Station", field:"name", sorter:"string", width:200},
-		{title:"<i class='fas fa-ruler'></i>", field:"dist", sorter:"number"},
-		{title:"<i class='fas fa-signal'></i>", field:"rssi", sorter:"number"},
-		{title:"<i class='fas fa-map-pin'></i>", field:"fix", sorter:"string",formatter:"html", width:10},
-	],
-});
-
-//Tabulator shipStations
-var shipStationsTable = new Tabulator("#shipStations", {
-	layout:"fitColumns",
-	height:"500px",
-	placeholder:"No Data Set",
-	//Only a fixed height allows the surrounding div to be set to overflow auto/scroll without sideeffects
-	rowClick:function(e, row){
-		stationSelect(row["_row"]["data"]["name"]);
-	},
-	initialSort:[
-		{column:"name",dir:"asc"}
-	],
-	columns:[
-		{title:"Station", field:"name", sorter:"string", width:200},
-		{title:"<i class='fas fa-ruler'></i>", field:"dist", sorter:"number"},
-		{title:"<i class='fas fa-map-pin'></i>", field:"fix", sorter:"string",formatter:"html", width:10},
-	],
-});
-
-//Tabulator stationMlatPeersTable
-var stationMlatPeersTable = new Tabulator("#stationMlatPeersTable", {
-	layout:"fitColumns",
-	placeholder:"No Data Set",
-	rowClick:function(e, row){
-		stationSelect(row["_row"]["data"]["name"]);
-	},
-	initialSort:[
-		{column:"name",dir:"asc"}
-	],
-	columns:[
-		{title:"MLAT sync peer", field:"name", sorter:"string", width:200},
-		{title:"<i class='fas fa-sync-alt' title='Number of syncs (higher is better)'></i>", field:"syncs", sorter:"number"},
-		{title:"<i class='fas fa-stopwatch' title='Sync time offset (lower is better)'></i>", field:"syncErr", sorter:"number"},
-		{title:"<i class='fas fa-wave-square' title='Sync frequency offset (closer to 0 is better)'></i>", field:"syncOffset", sorter:"number"},
-	],
-});
+	}
+);
 
 //Tabulator stats fixes
 var statsPositionsTable = new Tabulator("#statsPositionsTable", {
 	layout:"fitDataStretch",
 	placeholder:"Loading...",
-	/*height:"133px",*/
+	//height:"133px",
 	initialSort:[
-		{column:"flight",dir:"asc"}
+		{column:"pos",dir:"asc"}
 	],
 	columns:[
 		{title:"Fix", field:"pos", formatter:"html", sorter:"string"},
@@ -156,7 +124,6 @@ var statsPositionsTable = new Tabulator("#statsPositionsTable", {
 			min:0,
 			max:100,
 			color: "#2b72d7"
-		}
 		}*/
 	],
 });
@@ -169,7 +136,7 @@ var statsTypesTable = new Tabulator("#statsTypesTable", {
 		row.getElement().classList.add("listType_" + row["_row"]["data"]["type"]);
 	},
 	initialSort:[
-		{column:"Type",dir:"asc"}
+		{column:"type",dir:"asc"}
 	],
 	columns:[
 		{title:"TS", field:"type", visible:false, sorter:"string"},
@@ -240,3 +207,90 @@ var statsAirlinesTable = new Tabulator("#statsAirlinesTable", {
 		}
 	],
 });
+
+//Eigene Dynamische Tabellenlogik
+//hier könnte man das array sortieren nach festgelegtem sorter
+
+function radiosondeListTableRefresh(){
+
+	var tableBody = 'radiosondeListTableBody';
+	var tableSorter = 'altitude';
+	var tableSorterDirection = 'asc';
+
+	//sort
+	if(tableSorterDirection!='desc'){
+		radiosondeListTableData.sort((a,b) => {
+			return a[tableSorter] - b[tableSorter];
+		});
+	}
+	else{
+		radiosondeListTableData.sort((a,b) => {
+			return b[tableSorter] - a[tableSorter];
+		});
+	}
+
+	document.getElementById(tableBody).innerHTML='';
+	Object.values(radiosondeListTableData).forEach(
+		function tableRows(r){
+			var trclass = "";
+			if(typeof r.launchsite?.type !== "undefined"){
+				var trclass = 'tr_' + r.launchsite.type;
+			}
+			document.getElementById(tableBody).innerHTML+='<tr class="' + trclass + '" onclick="radiosondeSelect(\'' + r.id + '\')"><td>' + r.id + '</td><td>' + r.model + '</td><td>' + valueRefresh(Math.round(r.altitude), 'm') + '</td><td>' + valueRefresh(r.temperature, '°C') + '</td><td>' + valueRefresh(timeFromNow(r.timestamp), 's') + '</td></tr>';
+			//console.log(r.temperature);
+		}
+	);
+};
+
+function radiosondeSearchTableInit(){
+	console.log('fetch');
+	fetch('https://radiosonde.api.sdrmap.org/archive.json')
+	.catch((error) => {
+		if(alertNetworkOnce == 0){
+			corneroverlayShow('crit', 'No connection to Server, this application does not work offine!');
+			alertNetworkOnce = 1;
+		}
+	})
+	.then(function(response) { return response.json(); })
+	.then(function(r) {
+		if(alertNetworkOnce != 0){
+			alertNetworkOnce = 0;
+			corneroverlayClose();
+		}
+		console.log('fetchcomplete');
+		radiosondeSearchTableData=r;
+		
+		//radiosondeSearchTableRefresh()
+	})
+}
+
+function radiosondeSearchTableRefresh(){
+	var tableBody = 'radiosondeSearchTableBody';
+	
+	var output = '';
+	Object.entries(radiosondeSearchTableData).forEach(
+		function personde(e){
+			var r = e[1];
+			var include = true;
+			
+			if(typeof document.getElementById('radiosondeSearchId').value !== 'undefined' || document.getElementById('radiosondeSearchId').value != ''){
+				if(!e[0].includes(document.getElementById('radiosondeSearchId').value)){
+					include=false;
+					console.log('se');
+				}
+			}
+			
+			//filters
+			if(include == true){
+				var trclass = "";
+				if(typeof r.launchsite?.type !== "undefined"){
+					var trclass = 'tr_' + r.launchsite.type;
+				}
+				output+='<tr class="' + trclass + '" onclick="radiosondeSelect(\'' + e[0] + '\')"><td>' + e[0] + '</td><td>' + r.freq_mhz + '</td><td>' + r.model + '</td><td>' + valueRefresh(r.launchsite) + '</td><td>' + tsToReadable(r.timestamp) + '</td></tr>';
+			}
+		}
+	)
+	console.log('ready');
+	document.getElementById(tableBody).innerHTML=output;
+	console.log('ready2');
+}

@@ -46,3 +46,56 @@ function airportLayerAdd() {
 	})
 	document.getElementById("airportLayerToggle").className = 'buttonActive';
 }
+
+var osmLayer = L.tileLayer.wms("https://tiles.sdrmap.org/service", {
+	layers: 'osm',
+	format: 'image/png',
+	styles: '',
+	transparent: false,
+	opacity: 1,
+	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors (<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>)'
+});
+
+/*DWD WMS Geraffel*/
+var precipitationLayer = L.tileLayer.wms("https://tiles.sdrmap.org/service", {
+	layers: 'dwd:Niederschlagsradar',
+	format: 'image/png',
+	styles: '',
+	transparent: true,
+	opacity: 0.6,
+	attribution: '<a href="https://www.dwd.de/">Deutscher Wetterdienst</a>'
+});
+
+var weatherWarningLayer = L.tileLayer.wms("https://tiles.sdrmap.org/service", {
+	layers: 'Warnungen_Gemeinden',
+	format: 'image/png',
+	styles: '',
+	transparent: true,
+	opacity: 0.6,
+	attribution: 'Geobasisdaten Gemeinden: &copy; <a href="https://www.bkg.bund.de">BKG</a> 2015 (Daten verändert)'
+});
+
+var openSeaMapLayer = L.tileLayer.wms("https://tiles.sdrmap.org/service", {
+	layers: 'seamark',
+	format: 'image/png',
+	styles: '',
+	transparent: true,
+	attribution: '&copy; <a href="http://www.openseamap.org">OpenSeaMap</a> contributors'
+});
+
+var pegelOnlineLayer = L.tileLayer.wms("https://tiles.sdrmap.org/service", {
+	layers: 'PegelOnline',
+	format: 'image/png',
+	styles: '',
+	transparent: true,
+	attribution: '&copy; <a href="https://www.pegelonline.wsv.de/">WSV</a> (CC-BY 4.0)'
+});
+
+var windLayer = L.tileLayer.wms("https://tiles.sdrmap.org/service", {
+	layers: 'wind',
+	format: 'image/png',
+	styles: '',
+	transparent: true,
+	attribution: '&copy; <a href="https://www.dwd.de/">Deutscher Wetterdienst</a>',
+	pane: 'popupPane'
+});

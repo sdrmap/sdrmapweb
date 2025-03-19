@@ -11,6 +11,7 @@ function sidebarToggle() {
 //sidebarShow
 function sidebarShow() {
 	if(!sidebar){
+		centeroverlayClose();
 		document.getElementById("sidebar").className = 'sidebar';
 		document.getElementById("sidebarToggle").innerHTML = '<i class="fas fa-angle-double-right"></i>';
 		document.getElementById("tabbar").className = 'tabbar desktop';
@@ -50,7 +51,8 @@ function clearSidebar() {
 	vehicleFocusOff();
 
 	//Tabbed sidebar panels
-	var panels=["planeList", "shipList", "planeHistoryList", "stationList", "stats", "faq", "filter", "settings"];
+	//var panels=["planeList", "shipList", "radiosondeList", "launchsiteList", "planeHistoryList", "stationList", "stats", "settings"];
+	var panels=["planeList", "shipList", "radiosondeList", "launchsiteList", "stationList", "stats", "settings"];
 	panels.forEach(panelHide);
 	function panelHide(i){
 		document.getElementById(i + "Content").style = "display:none";
@@ -60,17 +62,45 @@ function clearSidebar() {
 	//Tabless panels
 	document.getElementById("planeContent").style = "display:none";
 	document.getElementById("shipContent").style = "display:none";
+	document.getElementById("radiosondeContent").style = "display:none";
 	document.getElementById("stationContent").style = "display:none";
+	document.getElementById("launchsiteContent").style = "display:none";
+
+	//Fiterpanel
+	document.getElementById("filterContent").style = "display:none";
+	if(document.getElementById("filterShow").className != 'buttonWait'){
+		document.getElementById("filterShow").className = 'button';
+	}
 
 	//stationDeSelect
-	stationSelected = '';
-	//heatmapLayerRemove();
+//	stationDeSelect();
+
+	if(stationSelected != ''){
+		heatmapLayerRemove();
+		stationSelected = '';
+		clearInterval(stationInterval);
+		//stationDeSelect();
+	}
+
+	if(launchsiteListInterval){
+		clearInterval(launchsiteListInterval);
+		launchsiteListInterval = '';
+	}
+
+	if(launchsiteSelected != ''){
+//		launchsiteDeSelect();
+	}
+
+
 	sidebarShow();
 	menueHide();
+
+	//Filter
+//	filterUpdate();
 }
 
 //tableCollapseToggle
-function tableCollapseToggle(id){
+/*function tableCollapseToggle(id){
 	if(document.getElementById(id + 'Body').style.display == "none"){
 		document.getElementById(id + 'Body').style.display = "";
 		document.getElementById(id + 'Toggle').className = "fas fa-minus-square";
@@ -79,19 +109,24 @@ function tableCollapseToggle(id){
 		document.getElementById(id + 'Body').style.display = "none";
 		document.getElementById(id + 'Toggle').className = "fas fa-plus-square";
 	}
-}
+}*/
 
 /***************************************/
 /***************Tabs open/close*********/
 /***************************************/
 
 function sidebarPanelShow(panel, hook=false){
+	//console.log('sidebar' + panel);
+	//console.trace();
+	centeroverlayClose();
 	var p = String(String(panel).replace('Show', ''));
 	var c = String(p + 'Content');
 	var s = String(p + 'Show');
 	clearSidebar();
 	document.getElementById(c).style = "display:block";
-	document.getElementById(s).className = 'buttonActive';
+	if(p != 'filter' || document.getElementById("filterShow").className != 'buttonWait'){
+		document.getElementById(s).className = 'buttonActive';
+	}
 	if(hook!=false){
 		this[hook]();
 	}

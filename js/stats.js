@@ -1,193 +1,1290 @@
 /*Stats*/
-function statsCalc(){
+function overallGraphsRefresh(timespan="1d"){
+	fetch('https://stats.api.sdrmap.org/overall/' + timespan + '.json')
+	.then(function(response) { return response.json(); })
+	.then(function(data) {
+		//console.log('gudelaune');
+		//console.log(data);
 
-	var liveStats = new Object();
-	globalThis.liveStats;
+		//buttons
+		document.getElementById("overallGraphsTimespanButton1h").className = 'overallGraphsTimespanButton';
+		document.getElementById("overallGraphsTimespanButton1d").className = 'overallGraphsTimespanButton';
+		document.getElementById("overallGraphsTimespanButton7d").className = 'overallGraphsTimespanButton';
+		document.getElementById("overallGraphsTimespanButton30d").className = 'overallGraphsTimespanButton';
+		document.getElementById("overallGraphsTimespanButton1y").className = 'overallGraphsTimespanButton';
+		document.getElementById("overallGraphsTimespanButton3y").className = 'overallGraphsTimespanButton';
+		document.getElementById("overallGraphsTimespanButton" + timespan).className = 'overallGraphsTimespanButtonActive';
 
-	//Fix
-	liveStats.fix = new Object();
-	liveStats.fix.all = new Object();
-	liveStats.fix.true = new Object();
-	liveStats.fix.false = new Object();
-	liveStats.fix.mlat = new Object();
-	liveStats.fix.all.adsb=0;
-	liveStats.fix.mlat.adsb=0;
-	liveStats.fix.true.adsb=0;
-	liveStats.fix.false.adsb=0;
-	liveStats.fix.all.ais=0;
-	liveStats.fix.mlat.ais=0;
-	liveStats.fix.true.ais=0;
-	liveStats.fix.false.ais=0;
-	var statsPositionsData = [];
+		var overallGraphs = [
+			'overallGraphAdsbDoughnut',
+			'overallGraphAdsbTypeDoughnut',
+			'overallGraphAdsb',
+			'overallGraphAdsbType',
+			'overallGraphAisDoughnut',
+			'overallGraphAisTypeDoughnut',
+			'overallGraphAis',
+			'overallGraphAisType',
+			'overallGraphRadiosondesDoughnut',
+			'overallGraphRadiosondesTypeDoughnut',
+			'overallGraphRadiosondes',
+			'overallGraphRadiosondesType',
+			'overallGraphStationsDoughnut',
+			'overallGraphStationsTypeBar',
+			'overallGraphStations',
+			'overallGraphStationsType'
+		];
 
-	//Types
-	liveStats.types = new Object();
-	liveStats.types.adsb = new Object();
-	liveStats.types.adsb.none=0;
-	liveStats.types.ais = new Object();
-	liveStats.types.ais.none=0;
-	var statsTypesData = [];
-
-	//Models
-	liveStats.models = new Object();
-	liveStats.airlines = new Object();
-
-	//Stations
-	liveStats.stations = new Object();
-	liveStats.stations.online=0;
-	liveStats.stations.adsb=0;
-	liveStats.stations.mlat=0;
-	liveStats.stations.ais=0;
-
-
-	//ADSB
-	Object.values(aircrafts).forEach(function(aircraft) {
-		liveStats.fix.all.adsb++;
-		if(typeof aircraft.lat !== "undefined") {
-			if('mlat' in aircraft){
-				liveStats.fix.mlat.adsb++;
+		overallGraphs.forEach(function (graph) {
+			if(Chart.getChart(graph) !== undefined) {
+				Chart.getChart(graph).destroy();
 			}
-			else{
-				liveStats.fix.true.adsb++;
-			}
-		}
-		else{
-			liveStats.fix.false.adsb++;
-		}
-		if(aircraft.model in liveStats.models) {
-			liveStats.models[aircraft.model]++;
-		} else {
-			liveStats.models[aircraft.model] = 1;
-		}
-		if(aircraft.airlineShort in liveStats.airlines) {
-			liveStats.airlines[aircraft.airlineShort]++;
-		} else {
-			liveStats.airlines[aircraft.airlineShort] = 1;
-		}
-		if(typeof aircraft.type !== 'undefined'){
-			if(aircraft.type in liveStats.types.adsb){
-				liveStats.types.adsb[aircraft.type]++;
-			}
-			else{
-				liveStats.types.adsb[aircraft.type]=1;
-			}
-		}
-		else{
-			liveStats.types.adsb.none++;
-		}
-	});
-
-	//AIS
-	Object.values(ships).forEach(function(ship) {
-		liveStats.fix.all.ais++;
-		if(ship.lat !== "Undefined" && ship.lat != "91"){
-			liveStats.fix.true.ais++;
-		}
-		else{
-			liveStats.fix.false.ais++;
-		}
-		if(typeof ship.type !== 'undefined'){
-			if(ship.type in liveStats.types.ais){
-				liveStats.types.ais[ship.type]++;
-			}
-			else{
-				liveStats.types.ais[ship.type]=1;
-			}
-		}
-		else{
-			liveStats.types.ais.none++;
-		}
-	});
-
-	//Stations
-	fetch(urlBase + '/data/station.json')
-		.then(response => response.json())
-		.then(data => stationMangle(data))
-		.catch(err => console.log(err));
-
-	function stationMangle(data) {
-		//Hier statt der Schleife mal was verbessern als assoc mit Object.entries
-		Object.values(data).forEach(function aircrafts(s){
-			if(typeof s.seen !== 'undefined'){
-				if(s.seen == 'now'){
-					liveStats.stations.online++;
-				}
-				if(s.planes > 0){
-					liveStats.stations.adsb++;
-				}
-				if(s.ships > 0){
-					liveStats.stations.ais++;
+		});
+		
+		var onepercent = (Object.values(data.adsb.fix.true).reduce((a, b) => a + b, 0) + Object.values(data.adsb.fix.mlat).reduce((a, b) => a + b, 0) + Object.values(data.adsb.fix.false).reduce((a, b) => a + b, 0))/100;
+		new Chart(
+			document.getElementById('overallGraphAdsbDoughnut'),
+			{
+				type: 'doughnut',
+				//type: 'pie',
+				options: {
+					responsive: true,
+					aspectRatio: 2,
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'ADS-B aircrafts by fix',
+							color: 'white'
+						},
+					}
+				},
+				data: {
+					labels: ['ADS-B fix', 'MLAT', 'no fix'],
+					datasets: [
+						{
+							data: [Object.values(data.adsb.fix.true).reduce((a, b) => a + b, 0)/onepercent, Object.values(data.adsb.fix.mlat).reduce((a, b) => a + b, 0)/onepercent, Object.values(data.adsb.fix.false).reduce((a, b) => a + b, 0)/onepercent],
+							backgroundColor: ['#0f0','orange','red'],
+							borderColor: ['#0f0','orange','red']
+						}
+					]
 				}
 			}
-		});
-		var statsStationsData = [];
-		console.log('push');
-		statsStationsData.push({"online":liveStats.stations.online, "adsb":liveStats.stations.adsb, "mlat":liveStats.stations.mlat, "ais":liveStats.stations.ais});
-		statsStationsTable.replaceData(statsStationsData);
-	}
-
-	//Ausgabe
-	//Fix
-	var ff = new Object();
-	Object.entries(liveStats.fix).forEach(function(type){
-		Object.entries(type[1]).forEach(function(f){
-			if(!(type[0] in ff)){
-				ff[type[0]] = new Object();
+		);
+		
+		var onepercent = Object.values(data.adsb.total).reduce((a, b) => a + b, 0)/100;
+		var other = Object.values(data.adsb.total).reduce((a, b) => a + b, 0)-(Object.values(data.adsb.type.bos).reduce((a, b) => a + b, 0) + Object.values(data.adsb.type.int).reduce((a, b) => a + b, 0) + Object.values(data.adsb.type.mil).reduce((a, b) => a + b, 0));
+		new Chart(
+			document.getElementById('overallGraphAdsbTypeDoughnut'),
+			{
+				type: 'doughnut',
+				//type: 'pie',
+				options: {
+					responsive: true,
+					aspectRatio: 2,
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'ADS-B aircrafts by type',
+							color: 'white'
+						},
+					}
+				},
+				data: {
+					labels: ['bos', 'int', 'mil', 'other'],
+					datasets: [
+						{
+							data: [Object.values(data.adsb.type.bos).reduce((a, b) => a + b, 0)/onepercent, Object.values(data.adsb.type.int).reduce((a, b) => a + b, 0)/onepercent, Object.values(data.adsb.type.mil).reduce((a, b) => a + b, 0)/onepercent, other/onepercent],
+							backgroundColor: ['red','#ff00c3','#0f0','#2b72d7'],
+							borderColor: ['red','#ff00c3','#0f0','#2b72d7']
+						}
+					]
+				}
 			}
-			ff[type[0]][f[0]]=f[1];
-		});
-	});
-
-	Object.entries(ff).forEach(function(type){
-		var ffx = new Object();
-		ffx.pos=fixToIcon(type[0]);
-		Object.entries(type[1]).forEach(function(x){
-			ffx[x[0]]=x[1];
-		});
-		statsPositionsData.push(ffx);
-	});
-
-	statsPositionsTable.replaceData(statsPositionsData);
-
-	//Types
-	var temp = new Object();
-	Object.entries(liveStats.types).forEach(function(type){
-		Object.entries(type[1]).forEach(function(t){
-			if(!(t[0] in temp)){
-				temp[t[0]] = new Object();
+		);
+		
+		new Chart(
+			document.getElementById('overallGraphAdsb'),
+			{
+				type: 'line',
+				options: {
+					//spanGaps: 1000 * 60 * 60 * 24 * 2,
+					responsive: true,
+					pointStyle: false,
+					elements: {
+						line: {
+							tension: 0
+						}
+					},
+					interaction: {
+						mode: 'index',
+						intersect: false
+					},
+					scales: {
+						y: {
+							title: {
+								display: true,
+								text: '# of aircrafts',
+								color: 'white'
+							},
+							min: 0,
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								color: 'white',
+							}
+						},
+						x: {
+							type: 'time',
+							time: {
+								tooltipFormat: 'D.M. HH:mm',
+								displayFormats: {
+									minute: 'D.M. HH:mm'
+								}
+							},
+							//
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								callback: function(val, index) {
+									//console.log(index);
+									// Hide every 2nd tick label
+									return index % 2 === 0 ? this.getLabelForValue(val) : '';
+								  },
+								color: 'white',
+							}
+						}
+					},
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'ADS-B aircrafts by fix',
+							color: 'white'
+						}
+					}
+				},
+				plugins: [vLine],
+				data: {
+					labels: Object.keys(data.adsb.total).map((x) => x * 1000),
+					datasets: [
+						{
+							label: 'Total',
+							data: Object.values(data.adsb.total),
+							borderColor: '#2b72d7',
+							backgroundColor: '#2b72d7'
+						},
+						{
+							label: 'ADS-B fix',
+							data: Object.values(data.adsb.fix.true),
+							borderColor: '#0f0',
+							backgroundColor: '#0f0'
+						},
+						{
+							label: 'MLAT',
+							data: Object.values(data.adsb.fix.mlat),
+							//data: null,
+							borderColor: 'orange',
+							backgroundColor: 'orange'
+						},
+						{
+							label: 'no fix',
+							data: Object.values(data.adsb.fix.false),
+							//data: null,
+							borderColor: 'red',
+							backgroundColor: 'red'
+						}
+					]
+				}
 			}
-			temp[t[0]][type[0]]=t[1];
-		});
+		);
+		new Chart(
+			document.getElementById('overallGraphAdsbType'),
+			{
+				type: 'line',
+				options: {
+					//spanGaps: 1000 * 60 * 60 * 24 * 2,
+					responsive: true,
+					pointStyle: false,
+					elements: {
+						line: {
+							tension: 0
+						}
+					},
+					interaction: {
+						mode: 'index',
+						intersect: false
+					},
+					scales: {
+						y: {
+							title: {
+								display: true,
+								text: '# of aircrafts',
+								color: 'white'
+							},
+							min: 0,
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								color: 'white',
+							}
+						},
+						x: {
+							type: 'time',
+							time: {
+								tooltipFormat: 'D.M. HH:mm',
+								displayFormats: {
+									minute: 'D.M. HH:mm'
+								}
+							},
+							//
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								callback: function(val, index) {
+									// Hide every 2nd tick label
+									return index % 2 === 0 ? this.getLabelForValue(val) : '';
+								  },
+								color: 'white',
+							}
+						}
+					},
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'ADS-B aircrafts by type',
+							color: 'white'
+						}
+					}
+				},
+				plugins: [vLine],
+				data: {
+					labels: Object.keys(data.adsb.type.bos).map((x) => x * 1000),
+					datasets: [
+						{
+							label: 'bos',
+							data: Object.values(data.adsb.type.bos),
+							borderColor: '#f00',
+							backgroundColor: '#f00'
+						},
+						{
+							label: 'int',
+							data: Object.values(data.adsb.type.int),
+							//data: null,
+							borderColor: '#ff00c3',
+							backgroundColor: '#ff00c3'
+						},
+						{
+							label: 'mil',
+							data: Object.values(data.adsb.type.mil),
+							//data: null,
+							borderColor: '#0f0',
+							backgroundColor: '#0f0'
+						}
+					]
+				}
+			}
+		);
+		//ais
+		var onepercent = (Object.values(data.ais.fix.true).reduce((a, b) => a + b, 0) + Object.values(data.ais.fix.false).reduce((a, b) => a + b, 0))/100;
+		new Chart(
+			document.getElementById('overallGraphAisDoughnut'),
+			{
+				type: 'doughnut',
+				//type: 'pie',
+				options: {
+					responsive: true,
+					aspectRatio: 2,
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'AIS vessels by fix',
+							color: 'white'
+						},
+					}
+				},
+				data: {
+					labels: ['fix', 'no fix'],
+					datasets: [
+						{
+							data: [Object.values(data.ais.fix.true).reduce((a, b) => a + b, 0)/onepercent, Object.values(data.ais.fix.false).reduce((a, b) => a + b, 0)/onepercent],
+							backgroundColor: ['#0f0','red'],
+							borderColor: ['#0f0','red']
+						}
+					]
+				}
+			}
+		);
+		
+		var onepercent = Object.values(data.ais.total).reduce((a, b) => a + b, 0)/100;
+		var other = Object.values(data.ais.total).reduce((a, b) => a + b, 0)-(Object.values(data.ais.type.bos).reduce((a, b) => a + b, 0) + Object.values(data.ais.type.int).reduce((a, b) => a + b, 0) + Object.values(data.ais.type.mil).reduce((a, b) => a + b, 0));
+		new Chart(
+			document.getElementById('overallGraphAisTypeDoughnut'),
+			{
+				type: 'doughnut',
+				//type: 'pie',
+				options: {
+					responsive: true,
+					aspectRatio: 2,
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'AIS vessels by type',
+							color: 'white'
+						},
+					}
+				},
+				data: {
+					labels: ['bos', 'int', 'mil', 'other'],
+					datasets: [
+						{
+							data: [Object.values(data.ais.type.bos).reduce((a, b) => a + b, 0)/onepercent, Object.values(data.ais.type.int).reduce((a, b) => a + b, 0)/onepercent, Object.values(data.ais.type.mil).reduce((a, b) => a + b, 0)/onepercent, other/onepercent],
+							backgroundColor: ['red','#ff00c3','#0f0','#2b72d7'],
+							borderColor: ['red','#ff00c3','#0f0','#2b72d7']
+						}
+					]
+				}
+			}
+		);	
+		new Chart(
+			document.getElementById('overallGraphAis'),
+			{
+				type: 'line',
+				options: {
+					//spanGaps: 1000 * 60 * 60 * 24 * 2,
+					responsive: true,
+					pointStyle: false,
+					elements: {
+						line: {
+							tension: 0
+						}
+					},
+					interaction: {
+						mode: 'index',
+						intersect: false
+					},
+					scales: {
+						y: {
+							title: {
+								display: true,
+								text: '# of vessels',
+								color: 'white'
+							},
+							min: 0,
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								color: 'white',
+							}
+						},
+						x: {
+							type: 'time',
+							time: {
+								tooltipFormat: 'D.M. HH:mm',
+								displayFormats: {
+									minute: 'D.M. HH:mm'
+								}
+							},
+							//
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								callback: function(val, index) {
+									// Hide every 2nd tick label
+									return index % 2 === 0 ? this.getLabelForValue(val) : '';
+								  },
+								color: 'white',
+							}
+						}
+					},
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'AIS vessels by fix',
+							color: 'white'
+						}
+					}
+				},
+				plugins: [vLine],
+				data: {
+					labels: Object.keys(data.ais.total).map((x) => x * 1000),
+					datasets: [
+						{
+							label: 'Total',
+							data: Object.values(data.ais.total),
+							borderColor: '#2b72d7',
+							backgroundColor: '#2b72d7'
+						},
+						{
+							label: 'fix',
+							data: Object.values(data.ais.fix.true),
+							borderColor: '#0f0',
+							backgroundColor: '#0f0'
+						},
+						{
+							label: 'no fix',
+							data: Object.values(data.ais.fix.false),
+							//data: null,
+							borderColor: 'red',
+							backgroundColor: 'red'
+						}
+					]
+				}
+			}
+		);
+		new Chart(
+			document.getElementById('overallGraphAisType'),
+			{
+				type: 'line',
+				options: {
+					//spanGaps: 1000 * 60 * 60 * 24 * 2,
+					responsive: true,
+					pointStyle: false,
+					elements: {
+						line: {
+							tension: 0
+						}
+					},
+					interaction: {
+						mode: 'index',
+						intersect: false
+					},
+					scales: {
+						y: {
+							title: {
+								display: true,
+								text: '# of vessels',
+								color: 'white'
+							},
+							min: 0,
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								color: 'white',
+							}
+						},
+						x: {
+							type: 'time',
+							time: {
+								tooltipFormat: 'D.M. HH:mm',
+								displayFormats: {
+									minute: 'D.M. HH:mm'
+								}
+							},
+							//
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								callback: function(val, index) {
+									// Hide every 2nd tick label
+									return index % 2 === 0 ? this.getLabelForValue(val) : '';
+								  },
+								color: 'white',
+							}
+						}
+					},
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'AIS vessels by type',
+							color: 'white'
+						}
+					}
+				},
+				plugins: [vLine],
+				data: {
+					labels: Object.keys(data.ais.type.bos).map((x) => x * 1000),
+					datasets: [
+						{
+							label: 'bos',
+							data: Object.values(data.ais.type.bos),
+							borderColor: '#f00',
+							backgroundColor: '#f00'
+						},
+						{
+							label: 'int',
+							data: Object.values(data.ais.type.int),
+							//data: null,
+							borderColor: '#ff00c3',
+							backgroundColor: '#ff00c3'
+						},
+						{
+							label: 'mil',
+							data: Object.values(data.ais.type.mil),
+							//data: null,
+							borderColor: '#0f0',
+							backgroundColor: '#0f0'
+						}
+					]
+				}
+			}
+		);
+		//radiosondes
+		var onepercent = (Object.values(data.radiosondes.fix.true).reduce((a, b) => a + b, 0) + Object.values(data.radiosondes.fix.false).reduce((a, b) => a + b, 0))/100;
+		new Chart(
+			document.getElementById('overallGraphRadiosondesDoughnut'),
+			{
+				type: 'doughnut',
+				//type: 'pie',
+				options: {
+					responsive: true,
+					aspectRatio: 2,
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'radiosondes by fix',
+							color: 'white'
+						},
+					}
+				},
+				data: {
+					labels: ['fix', 'no fix'],
+					datasets: [
+						{
+							data: [Object.values(data.radiosondes.fix.true).reduce((a, b) => a + b, 0)/onepercent, Object.values(data.radiosondes.fix.false).reduce((a, b) => a + b, 0)/onepercent],
+							backgroundColor: ['#0f0','red'],
+							borderColor: ['#0f0','red']
+						}
+					]
+				}
+			}
+		);
+		
+		var onepercent = Object.values(data.radiosondes.total).reduce((a, b) => a + b, 0)/100;
+		var other = Object.values(data.radiosondes.total).reduce((a, b) => a + b, 0)-(Object.values(data.radiosondes.type.bos).reduce((a, b) => a + b, 0) + Object.values(data.radiosondes.type.int).reduce((a, b) => a + b, 0) + Object.values(data.radiosondes.type.mil).reduce((a, b) => a + b, 0));
+		new Chart(
+			document.getElementById('overallGraphRadiosondesTypeDoughnut'),
+			{
+				type: 'doughnut',
+				//type: 'pie',
+				options: {
+					responsive: true,
+					aspectRatio: 2,
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'radiosondes by type',
+							color: 'white'
+						},
+					}
+				},
+				data: {
+					labels: ['bos', 'int', 'mil', 'other'],
+					datasets: [
+						{
+							data: [Object.values(data.radiosondes.type.bos).reduce((a, b) => a + b, 0)/onepercent, Object.values(data.radiosondes.type.int).reduce((a, b) => a + b, 0)/onepercent, Object.values(data.radiosondes.type.mil).reduce((a, b) => a + b, 0)/onepercent, other/onepercent],
+							backgroundColor: ['red','#ff00c3','#0f0','#2b72d7'],
+							borderColor: ['red','#ff00c3','#0f0','#2b72d7']
+						}
+					]
+				}
+			}
+		);
+		new Chart(
+			document.getElementById('overallGraphRadiosondes'),
+			{
+				type: 'line',
+				options: {
+					//spanGaps: 1000 * 60 * 60 * 24 * 2,
+					responsive: true,
+					pointStyle: false,
+					elements: {
+						line: {
+							tension: 0
+						}
+					},
+					interaction: {
+						mode: 'index',
+						intersect: false
+					},
+					scales: {
+						y: {
+							title: {
+								display: true,
+								text: '# of radiosondes',
+								color: 'white'
+							},
+							min: 0,
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								color: 'white',
+							}
+						},
+						x: {
+							type: 'time',
+							time: {
+								tooltipFormat: 'D.M. HH:mm',
+								displayFormats: {
+									minute: 'D.M. HH:mm'
+								}
+							},
+							//
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								callback: function(val, index) {
+									// Hide every 2nd tick label
+									return index % 2 === 0 ? this.getLabelForValue(val) : '';
+								  },
+								color: 'white',
+							}
+						}
+					},
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'Radiosondes by fix',
+							color: 'white'
+						}
+					}
+				},
+				plugins: [vLine],
+				data: {
+					labels: Object.keys(data.radiosondes.total).map((x) => x * 1000),
+					datasets: [
+						{
+							label: 'Total',
+							data: Object.values(data.radiosondes.total),
+							borderColor: '#2b72d7',
+							backgroundColor: '#2b72d7'
+						},
+						{
+							label: 'fix',
+							data: Object.values(data.radiosondes.fix.true),
+							borderColor: '#0f0',
+							backgroundColor: '#0f0'
+						},
+						{
+							label: 'no fix',
+							data: Object.values(data.radiosondes.fix.false),
+							//data: null,
+							borderColor: 'red',
+							backgroundColor: 'red'
+						}
+					]
+				}
+			}
+		);
+		new Chart(
+			document.getElementById('overallGraphRadiosondesType'),
+			{
+				type: 'line',
+				options: {
+					//spanGaps: 1000 * 60 * 60 * 24 * 2,
+					responsive: true,
+					pointStyle: false,
+					elements: {
+						line: {
+							tension: 0
+						}
+					},
+					interaction: {
+						mode: 'index',
+						intersect: false
+					},
+					scales: {
+						y: {
+							title: {
+								display: true,
+								text: '# of radiosondes',
+								color: 'white'
+							},
+							min: 0,
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								color: 'white',
+							}
+						},
+						x: {
+							type: 'time',
+							time: {
+								tooltipFormat: 'D.M. HH:mm',
+								displayFormats: {
+									minute: 'D.M. HH:mm'
+								}
+							},
+							//
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								callback: function(val, index) {
+									// Hide every 2nd tick label
+									return index % 2 === 0 ? this.getLabelForValue(val) : '';
+								  },
+								color: 'white',
+							}
+						}
+					},
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'radiosondes by type',
+							color: 'white'
+						}
+					}
+				},
+				plugins: [vLine],
+				data: {
+					labels: Object.keys(data.radiosondes.type.bos).map((x) => x * 1000),
+					datasets: [
+						{
+							label: 'bos',
+							data: Object.values(data.radiosondes.type.bos),
+							borderColor: '#f00',
+							backgroundColor: '#f00'
+						},
+						{
+							label: 'int',
+							data: Object.values(data.radiosondes.type.int),
+							//data: null,
+							borderColor: '#ff00c3',
+							backgroundColor: '#ff00c3'
+						},
+						{
+							label: 'mil',
+							data: Object.values(data.radiosondes.type.mil),
+							//data: null,
+							borderColor: '#0f0',
+							backgroundColor: '#0f0'
+						}
+					]
+				}
+			}
+		);
+		//statione
+		var onepercent = Object.values(data.stations.total).reduce((a, b) => a + b, 0)/100;
+		new Chart(
+			document.getElementById('overallGraphStationsDoughnut'),
+			{
+				type: 'doughnut',
+				//type: 'pie',
+				options: {
+					responsive: true,
+					aspectRatio: 2,
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'Stations by status',
+							color: 'white'
+						},
+					}
+				},
+				data: {
+					labels: ['online', 'partially online', 'offline'],
+					datasets: [
+						{
+							data: [Object.values(data.stations.status.online).reduce((a, b) => a + b, 0)/onepercent, Object.values(data.stations.status.partiallyonline).reduce((a, b) => a + b, 0)/onepercent, Object.values(data.stations.status.offline).reduce((a, b) => a + b, 0)/onepercent],
+							backgroundColor: ['#0f0','yellow','red'],
+							borderColor: ['#0f0','yellow','red']
+						}
+					]
+				}
+			}
+		);
+		console.log(Object.values(data.stations.services.adsb)[Object.keys(data.stations.services.adsb).length - 2]);
+		console.log(Object.keys(data.stations.services.adsb)[Object.keys(data.stations.services.adsb).length - 1]);
+		console.log(Object.keys(data.stations.services.adsb).length - 1);
+		console.log(Object.keys(data.stations.services.adsb).length);
+		console.log(data.stations.services.adsb);
+		new Chart(
+			document.getElementById('overallGraphStationsTypeBar'),
+			{
+				type: 'bar',
+				//type: 'pie',
+				options: {
+					responsive: true,
+					aspectRatio: 2,
+					scales: {
+						y: {
+							title: {
+								display: true,
+								text: '# of stations',
+								color: 'white'
+							},
+							min: 0,
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								color: 'white',
+							}
+						},
+						x: {
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								color: 'white',
+							}
+						}
+					},
+					plugins: {
+						legend: {
+							display: false
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'Stations by service',
+							color: 'white'
+						},
+					}
+				},
+				data: {
+					labels: ['adsb', 'mlat', 'ais', 'radiosonde', 'feeder'],
+					datasets: [
+						{
+							data: [Object.values(data.stations.services.adsb)[Object.keys(data.stations.services.adsb).length - 2], Object.values(data.stations.services.mlat)[Object.keys(data.stations.services.mlat).length - 2], Object.values(data.stations.services.ais)[Object.keys(data.stations.services.ais).length - 2], Object.values(data.stations.services.radiosonde)[Object.keys(data.stations.services.radiosonde).length - 2], Object.values(data.stations.services.feeder)[Object.keys(data.stations.services.feeder).length - 2]],
+							backgroundColor: ['#0f0','orange','#2b72d7','#ff00c3','white'],
+							borderColor: ['#0f0','orange','#2b72d7','#ff00c3','white']
+						}
+					]
+				}
+			}
+		);
+		new Chart(
+			document.getElementById('overallGraphStations'),
+			{
+				type: 'line',
+				options: {
+					//spanGaps: 1000 * 60 * 60 * 24 * 2,
+					responsive: true,
+					pointStyle: false,
+					elements: {
+						line: {
+							tension: 0
+						}
+					},
+					interaction: {
+						mode: 'index',
+						intersect: false
+					},
+					scales: {
+						y: {
+							title: {
+								display: true,
+								text: '# of stations',
+								color: 'white'
+							},
+							min: 0,
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								color: 'white',
+							}
+						},
+						x: {
+							type: 'time',
+							time: {
+								tooltipFormat: 'D.M. HH:mm',
+								displayFormats: {
+									minute: 'D.M. HH:mm'
+								}
+							},
+							//
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								callback: function(val, index) {
+									// Hide every 2nd tick label
+									return index % 2 === 0 ? this.getLabelForValue(val) : '';
+								  },
+								color: 'white',
+							}
+						}
+					},
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'stations',
+							color: 'white'
+						}
+					}
+				},
+				plugins: [vLine],
+				data: {
+					labels: Object.keys(data.stations.total).map((x) => x * 1000),
+					datasets: [
+						{
+							label: 'total',
+							data: Object.values(data.stations.total),
+							borderColor: '#2b72d7',
+							backgroundColor: '#2b72d7'
+						},
+						{
+							label: 'online',
+							data: Object.values(data.stations.status.online),
+							borderColor: '#0f0',
+							backgroundColor: '#0f0'
+						},
+						{
+							label: 'partially online',
+							data: Object.values(data.stations.status.partiallyonline),
+							//data: null,
+							borderColor: 'yellow',
+							backgroundColor: 'yellow'
+						},
+						{
+							label: 'offline',
+							data: Object.values(data.stations.status.offline),
+							//data: null,
+							borderColor: '#f00',
+							backgroundColor: '#f00'
+						}
+					]
+				}
+			}
+		);
+		new Chart(
+			document.getElementById('overallGraphStationsType'),
+			{
+				type: 'line',
+				options: {
+					//spanGaps: 1000 * 60 * 60 * 24 * 2,
+					responsive: true,
+					pointStyle: false,
+					elements: {
+						line: {
+							tension: 0
+						}
+					},
+					interaction: {
+						mode: 'index',
+						intersect: false
+					},
+					scales: {
+						y: {
+							title: {
+								display: true,
+								text: '# of stations',
+								color: 'white'
+							},
+							min: 0,
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								color: 'white',
+							}
+						},
+						x: {
+							type: 'time',
+							time: {
+								tooltipFormat: 'D.M. HH:mm',
+								displayFormats: {
+									minute: 'D.M. HH:mm'
+								}
+							},
+							//
+							border: {
+								color: '#656565'
+							},
+							grid: {
+								color: '#656565',
+							},
+							ticks: {
+								callback: function(val, index) {
+									// Hide every 2nd tick label
+									return index % 2 === 0 ? this.getLabelForValue(val) : '';
+								  },
+								color: 'white',
+							}
+						}
+					},
+					plugins: {
+						legend: {
+							position: 'bottom',
+							labels: {
+								color: 'white'
+							}
+						},
+						title: {
+							display: true,
+							text: 'sdrmap.org',
+							color: 'white'
+						},
+						subtitle: {
+							display: true,
+							text: 'stations by service',
+							color: 'white'
+						}
+					}
+				},
+				plugins: [vLine],
+				data: {
+					labels: Object.keys(data.stations.services.adsb).map((x) => x * 1000),
+					datasets: [
+						{
+							label: 'adsb',
+							data: Object.values(data.stations.services.adsb),
+							borderColor: '#0f0',
+							backgroundColor: '#0f0'
+						},
+						{
+							label: 'mlat',
+							data: Object.values(data.stations.services.mlat),
+							//data: null,
+							borderColor: 'orange',
+							backgroundColor: 'orange'
+						},
+						{
+							label: 'ais',
+							data: Object.values(data.stations.services.ais),
+							//data: null,
+							borderColor: '#2b72d7',
+							backgroundColor: '#2b72d7'
+						},
+						{
+							label: 'radiosondes',
+							data: Object.values(data.stations.services.radiosonde),
+							//data: null,
+							borderColor: '#ff00c3',
+							backgroundColor: '#ff00c3'
+						},
+						{
+							label: 'feeder',
+							data: Object.values(data.stations.services.feeder),
+							//data: null,
+							borderColor: 'white',
+							backgroundColor: 'white'
+						}
+					]
+				}
+			}
+		);
 	});
-
-	Object.entries(temp).forEach(function(type){
-		var tempx = new Object();
-		tempx.type=type[0];
-		tempx.typeLong=typeToLong(type[0]);
-		Object.entries(type[1]).forEach(function(x){
-			tempx[x[0]]=x[1];
-		});
-		statsTypesData.push(tempx);
-	});
-
-	statsTypesTable.replaceData(statsTypesData);
-
-	//Models
-	var statsModelsData = [];
-	Object.entries(liveStats.models).forEach(function(model){
-		statsModelsData.push({"model":model[0], "count":model[1], "rel":model[1]/liveStats.fix.all.adsb*100});
-	});
-	statsModelsTable.replaceData(statsModelsData);
-
-	//Airlines
-	var statsAirlinesData = [];
-	Object.entries(liveStats.airlines).forEach(function(airline){
-		statsAirlinesData.push({"airline":airline[0], "count":airline[1], "rel":airline[1]/liveStats.fix.all.adsb*100});
-	});
-	statsAirlinesTable.replaceData(statsAirlinesData);
-
-
-
-
 }
 
+function overallGraphsTimespanSet(t){
+	overallGraphsTimespan = t;
+	overallGraphsBigRefresh();
+	document.getElementById("overallGraphsTimespanButton1h").className = 'overallGraphsTimespanButton';
+	document.getElementById("overallGraphsTimespanButton1d").className = 'overallGraphsTimespanButton';
+	document.getElementById("overallGraphsTimespanButton7d").className = 'overallGraphsTimespanButton';
+	document.getElementById("overallGraphsTimespanButton30d").className = 'overallGraphsTimespanButton';
+	document.getElementById("overallGraphsTimespanButton1y").className = 'overallGraphsTimespanButton';
+	document.getElementById("overallGraphsTimespanButton3y").className = 'overallGraphsTimespanButton';
+	document.getElementById("overallGraphsTimespanButton" + t).className = 'overallGraphsTimespanButtonActive';
+}

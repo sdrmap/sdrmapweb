@@ -4,7 +4,6 @@ var ovals={
     "features": [
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -3897,7 +3896,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -4158,7 +4156,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -4307,7 +4304,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -4360,7 +4356,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -4469,7 +4464,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -8482,7 +8476,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -12855,7 +12848,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -16916,7 +16908,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -20953,7 +20944,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -20990,7 +20980,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -25403,7 +25392,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -25724,7 +25712,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -25841,7 +25828,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -25926,7 +25912,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -29923,7 +29908,7 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
+
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -33824,7 +33809,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -33981,7 +33965,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -34154,7 +34137,7 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
+
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -34371,7 +34354,6 @@ var ovals={
         },
         {
             "type": "Feature",
-            "properties": null,
             "geometry": {
                 "type": "LineString",
                 "coordinates": [
@@ -34491,5 +34473,6 @@ var ovals={
 var ovalsLayer = L.geoJSON(ovals,{
 	color:"black",
 	weight:5,
-	opacity:1
+	opacity:1,
+	zIndexOffset: -200000
 });
