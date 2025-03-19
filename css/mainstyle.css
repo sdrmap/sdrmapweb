@@ -9,12 +9,458 @@ a{
 	text-decoration:none;
 }
 
+a[href^="http"]{
+	cursor:pointer;
+}
+
+[onclick]{
+	cursor:pointer;
+}
+
+i.ok{
+	#color:#0f0;
+}
+
+i.warn{
+	color:#ff0;
+}
+
+i.crit{
+	color:#f00;
+}
+/*sidebar*/
+
+/*tables*/
+table.iconTable tbody td:nth-child(1) {
+	width: 20px;
+	text-align: center;
+}
+
+table .left {
+	margin: 0px;
+	float: left;
+}
+
+table .right {
+	margin: 0px;
+	float: right;
+}
+
+#planeHistoryTable tbody td:nth-child(2){
+	text-align: center;
+}
+
+/*Infotables*/
+/*plane*/
+#planeStationsTable tbody td:nth-child(2){
+	width: 35px;
+	text-align: right;
+}
+#planeStationsTable tbody td:nth-child(3){
+	width: 50px;
+	text-align: right;
+}
+#planeStationsTable tbody td:nth-child(4){
+	width: 45px;
+	text-align: right;
+}
+
+/*ship*/
+#shipLength{
+	width: 110px;
+}
+#shipWidth{
+	width: 110px;
+}
+#shipLatLon{
+	width: 164px;
+}
+#shipCourse{
+	width: 83px;
+}
+
+#shipHistoryTable tbody td:nth-child(2){
+	text-align: center;
+}
+
+#shipStationsTable tbody td:nth-child(2){
+	width: 50px;
+	text-align: right;
+}
+
+#shipStationsTable tbody td:nth-child(3){
+	width: 50px;
+	text-align: right;
+}
+
+#shipStationsTable tbody td:nth-child(4){
+	width: 50px;
+	text-align: right;
+}
+
+#shipStationsTable tbody td:nth-child(5){
+	width: 20px;
+	text-align: center;
+}
+
+/*radiosonde*/
+#radiosondeListTable tbody td:nth-child(1){
+	width: 60px;
+}
+
+#radiosondeListTable tbody td:nth-child(3){
+	width: 50px;
+	text-align: right;
+}
+
+#radiosondeListTable tbody td:nth-child(4){
+	width: 50px;
+	text-align: right;
+}
+
+#radiosondeListTable tbody td:nth-child(5){
+	width: 50px;
+	text-align: right;
+}
+
+#radiosondeListTable tbody td:nth-child(6){
+	width: 45px;
+	text-align: right;
+}
+
+#radiosondeContent{
+	overflow: auto;
+}
+
+#radiosondeVendor{
+	width: 171px;
+}
+
+#radiosondePositionTable tbody td:nth-child(2){
+	text-align: right;
+	width: 81px;
+}
+
+#radiosondePositionTable tbody td:nth-child(3){
+	text-align: right;
+	width: 81px;
+}
+
+#radiosondePositionTable tbody td:nth-child(4){
+	text-align: right;
+	width: 81px;
+}
+
+#radiosondePositionTable tbody td:nth-child(5){
+	text-align: right;
+}
+
+#radiosondePositionTable tbody #radiosondeLatLon{
+	width: 171px;
+	text-align: center;
+}
+
+/*radiosonde history table*/
+#radiosondeHistoryTable thead i.fa-chart-column{
+	float: right;
+}
+
+#radiosondeLaunchsiteName{
+	text-align: left !important;
+}
+
+#radiosondeFirstcontactTimestamp{
+	width: 121px;
+}
+
+#radiosondeFirstcontactStation{
+	text-align: left !important;
+}
+
+#radiosondeHistoryTable tbody td:nth-child(1){
+	text-align: center;
+	width: 20px;
+}
+
+#radiosondeHistoryTable tbody td:nth-child(2){
+	text-align: right;
+	width: 41px;
+}
+
+#radiosondeHistoryTable tbody td:nth-child(3){
+	text-align: right;
+}
+
+#radiosondeHistoryTable tbody td:nth-child(4){
+	text-align: right;
+}
+
+#radiosondeHistoryTable tbody td:nth-child(5){
+	text-align: right;
+}
+
+/*radiosonde prediction table*/
+#radiosondePredictionLatLon{
+	text-align: center !important;
+}
+/*
+#radiosondeFirstcontactTimestamp{
+	width: 121px;
+}
+
+#radiosondeFirstcontactStation{
+	text-align: left !important;
+}*/
+
+#radiosondePredictionTable tbody td:nth-child(1){
+	text-align: center;
+	width: 20px;
+}
+
+#radiosondePredictionTable tbody td:nth-child(2){
+	text-align: right;
+	width: 120px;
+}
+
+#radiosondePredictionTable tbody td:nth-child(3){
+	text-align: right;
+	width: 120px;
+}
+
+#radiosondePredictionTable tbody td:nth-child(4){
+	text-align: right;
+}
+
+/*radiosonde station table*/
+#radiosondeStationsTable tbody td:nth-child(2){
+	width: 45px;
+	text-align: right;
+}
+
+#radiosondeStationsTable tbody td:nth-child(3){
+	width: 45px;
+	text-align: right;
+}
+
+#radiosondeStationsTable tbody td:nth-child(4){
+	width: 50px;
+	text-align: right;
+}
+
+/*launchsites list*/
+#launchsiteListTable tbody td:nth-child(2){
+	text-align: right;
+	width: 75px;
+}
+
+#launchsiteListTable tbody td:nth-child(3){
+	text-align: right;
+	width: 25px;
+}
+
+/*launchsite*/
+#launchsiteContent{
+	overflow:auto;
+}
+
+#launchsiteInfoTable tbody td:nth-child(1){
+	text-align: center;
+	width: 20px;
+}
+
+#launchsiteActiveSondesTable tbody td:nth-child(2){
+	width: 75px;
+}
+
+#launchsiteActiveSondesTable tbody td:nth-child(3){
+	width: 60px;
+	text-align: right;
+}
+
+#launchsiteActiveSondesTable tbody td:nth-child(4){
+	width: 125px;
+	text-align: right;
+}
+
+#launchsiteRecentSondesTable thead i.fa-route{
+	float: right;
+}
+
+#launchsiteRecentSondesTable tbody td:nth-child(2){
+	width: 125px;
+	text-align: right;
+}
+
+#launchsiteRecentSondesTable tbody td:nth-child(3){
+	width: 75px;
+	text-align: right;
+}
+
+
+#launchsiteUpcomingSondesTable thead i.fa-route{
+	float: right;
+}
+
+#launchsiteUpcomingSondesTable tbody td:nth-child(1){
+	text-align: center;
+	width: 20px;
+	font-weight: bold;
+}
+
+#launchsiteUpcomingSondesTable tbody td:nth-child(2){
+	#width: 125px;
+	text-align: right;
+}
+
+#launchsiteUpcomingSondesTable tbody td:nth-child(3){
+	width: 75px;
+	text-align: right;
+}
+
+
+#launchsiteScheduleTable tbody td{
+	text-align: center;
+}
+
+#launchsiteScheduleTable tbody td:nth-child(1){
+	font-weight: bold;
+}
+
+#launchsiteScheduleTable tbody td:nth-child(n+2){
+	width: 60px;
+}
+
+/*station*/
+#stationGraphsTable thead i.fa-arrow-up-right-from-square{
+	float: right;
+}
+
+#stationGraphsTable tbody td{
+	height: 300px;
+}
+
+/* */
+.td_highlighted{
+	color: black;
+	background: orange;
+}
+
+/*graphs big*/
+.stationGraphsTimespanButton{
+	float: left;
+	background: #272b35;
+	padding: 10px;
+	margin-right: 3px;
+	font-size: 20px;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	cursor: pointer;
+}
+
+.stationGraphsTimespanButtonActive{
+	float: left;
+	background: orange;
+	padding: 10px;
+	margin-right: 3px;
+	font-size: 20px;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	cursor: pointer;
+}
+
+.overallGraphsTimespanButton{
+	float: left;
+	background: #272b35;
+	padding: 10px;
+	margin-right: 3px;
+	font-size: 20px;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	cursor: pointer;
+}
+
+.overallGraphsTimespanButtonActive{
+	float: left;
+	background: orange;
+	padding: 10px;
+	margin-right: 3px;
+	font-size: 20px;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	cursor: pointer;
+}
+
+.graphSectionGrid{
+	display: grid;
+	gap: 2rem;
+	grid-template-columns: repeat(auto-fit, minmax(750px, 1fr));
+	border-top: solid 1px;
+	margin-bottom: 50px;
+	clear: left;
+#	width: 100%;
+#	overflow: hidden;
+#	overflow-behavior-x: contain;
+#	overflow-behavior-y: auto;
+}
+
+.graphSection{
+	border-bottom: solid 1px;
+	width: 100%;
+}
+
+.graphSection canvas:empty{
+	display:none;
+}
+
+.graphSection h2{
+	margin-bottom: 5px;
+	text-decoration: underline
+}
+
+.graphSection h3{
+	margin-bottom: 0px;
+}
+
+/*Marker*/
+div.stationMarker{
+	#color:#0051a0;
+	color:#3388ff;
+	font-size:20px;
+	#text-shadow:3px 3px 3px grey;
+	text-shadow:3px 3px 3px blck;
+	#opacity:0.75;
+}
+
+div.stationMarkerActive{
+	color:orange;
+	font-size:20px;
+	text-shadow:3px 3px 3px black;
+	opacity:1;
+}
+
+div.airportMarker{
+	color:#0051a0;
+	font-size:20px;
+	text-shadow:3px 3px 3px grey;
+	opacity:0.5;
+}
+
+/*^^^^^^^^^^^^^^^^^^*/
+/******reworked******/
+/*------------------*/
+/****needs rework****/
+ 
 /*Navigation*/
 .navbar#navbarDesktop{
 	position:absolute;
 	z-index:999;
-	left:10px;
+	margin:4px;
 	margin-right:490px;
+}
+.leftbar#leftbarDesktop{
+	position:absolute;
+	z-index:999;
+	top:50px;
 }
 [class^=tabbar]{
 	z-index:9999;
@@ -55,6 +501,10 @@ a{
 	float:left;
 	margin:1px;
 }
+.leftbar [class^=button]{
+	margin:5px;
+	font-size:24px;
+}
 #tabbar [class^=button]{
 	margin:5px;
 	font-size:24px;
@@ -65,7 +515,7 @@ a{
 	position:fixed;
 	right:0px;
 	width:400px;
-	height:100%;
+	height:calc(100% - 20px);
 	z-index:999;
 	background:#393f4cd1;
 	padding:10px;
@@ -97,6 +547,10 @@ a{
 	overflow:auto;
 	scrollbar-width:none;
 }
+#stationContent{
+	overflow:auto;
+	#scrollbar-width:none;
+}
 #faqContent{
 	overflow:auto;
 	scrollbar-width:none;
@@ -115,13 +569,92 @@ a{
 	width:100%;
 }
 
+.stationInfoRefreshIndicator{
+	display:none;
+}
+
+.minitag{
+	margin-right: 3px;
+	border-radius: 3px;
+	padding: 3px;
+	background: #2b72d7;
+}
+
 /*Manual Tables*/
 /*Table*/
 table{
 	width:100%;
+	margin-bottom: 5px;
 }
 td{
 	padding:5px;
+}
+
+.stationInfoIconColumn{
+	width:20px;
+	text-align: center;
+}
+
+#stationPlanes{
+	width:80px;
+}
+#stationPositions{
+	width:79px;
+}
+#stationMlats{
+	width:49px;
+}
+#stationPositionsFalse{
+	width:49px;
+}
+#stationPlanesPositionsUnique{
+	width:49px;
+}
+.topRegistration{
+	width:55px;
+}
+.topFlight{
+	#width:50px;
+}
+.topMmsi{
+	width:40px;
+}
+.topShipname{
+	#width:40px;
+}
+.topCallsign{
+	width:55px;
+}
+.peerName{
+	#width:40px;
+}
+.topRssi{
+	width:40px;
+	text-align: end;
+}
+.topDist{
+	width:40px;
+	text-align: end;
+}
+.topFix{
+	width:10px;
+	text-align: end;
+}
+.peerSyncs{
+	width:10px;
+	text-align: end;
+}
+.peerSyncErr{
+	width:10px;
+	text-align: end;
+}
+.peerSyncOffset{
+	width:10px;
+	text-align: end;
+}
+.peerDistance{
+	width:20px;
+	text-align: end;
 }
 
 /*Tablehead*/
@@ -142,19 +675,74 @@ tbody tr{
 }
 
 /*planeInfoTable*/
-table#planeInfoTable td:nth-child(1) {
-	width: 20%;
-}
 table#planeInfoTable td:nth-child(2) {
 	width: 15%;
 }
 
 /*planePositionTable*/
-table#planePositionTable td:nth-child(1) {
-	width: 20%;
-}
 table#planePositionTable td:nth-child(2) {
-	width: 40%;
+	width: 69px;
+}
+table#planePositionTable td:nth-child(3) {
+	width: 69px;
+}
+table#planePositionTable td:nth-child(4) {
+	width: 90px;
+}
+
+#planeLatLon{
+	text-align:center;
+}
+
+#planeAltitudeNowMetric{
+	text-align: right;
+}
+
+#planeAltitudeNow{
+	text-align: right;
+}
+
+#planeNavAltitudeMcp{
+	text-align: right;
+}
+
+#planeNavAltitudeFms{
+	text-align: right;
+}
+
+#planeSpeedNowMetric{
+	text-align: right;
+}
+
+#planeSpeedNow{
+	text-align: right;
+}
+
+#planeVertrateNowMetric{
+	text-align: right;
+}
+
+#planeVertrateNow{
+	text-align: right;
+}
+
+#planeTrack{
+	text-align: right;
+}
+
+#planeNavHeading{
+	text-align: right;
+}
+
+/*planeStationsTable*/
+#planeStationsTableBody tr td:last-of-type{
+	text-align: center;
+	width: 16px;
+}
+
+/*Table footer*/
+.tabulator-footer{
+	display: none;
 }
 
 /*picture*/
@@ -215,15 +803,26 @@ table img{
 	margin:1px;
 	padding:2px;
 }
+.tr_bos{
+	color: red;
+}
 .listType_bos .tabulator-cell{
 	color: red !important;
+}
+.tr_int{
+	color: #ff00c3;
 }
 .listType_int .tabulator-cell{
 	color: #ff00c3 !important;
 }
+.tr_mil{
+	color: #0f0;
+}
 .listType_mil .tabulator-cell{
 	color: #0f0 !important;
 }
+
+
 
 /*Leaflet map*/
 #map{
@@ -254,19 +853,7 @@ table img{
 	border-radius:5px !important;
 }
 
-/*Marker*/
-div.stationMarker{
-	color:#0051a0;
-	font-size:20px;
-	text-shadow:3px 3px 3px grey;
-	opacity:0.75;
-}
-div.airportMarker{
-	color:#0051a0;
-	font-size:20px;
-	text-shadow:3px 3px 3px grey;
-	opacity:0.5;
-}
+
 
 /*Heatmap Layer*/
 .leaflet-heatmap-layer{
@@ -276,9 +863,6 @@ div.airportMarker{
 /*Icons*/
 i.fa-check-circle{
 	color:#0f0;
-}
-i.fa-compass{
-	color:orange;
 }
 i.fa-times-circle{
 	color:red;
@@ -301,6 +885,9 @@ i.fa-undo-alt{
 /*Filters*/
 .filter{
 	cursor: pointer;
+}
+#filterContent{
+	overflow: auto;
 }
 .filterActive{
 	background: orange !important;
@@ -325,8 +912,91 @@ i.fa-undo-alt{
 	color: #0000;
 	cursor: pointer;
 }
+
 .filterAltitudeActive{
 	color: #000f;
+}
+
+.filterAltitudeGauge{
+	text-align: center;
+}
+
+.filterSlider{
+	width: 100%;
+}
+
+.container{
+	position: relative;
+	width: 100%;
+	height: 30px;
+}
+
+input[type="range"]{
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	width: 100%;
+	outline: none;
+	position: absolute;
+	margin: auto;
+	top: 0;
+	bottom: 0;
+	background-color: transparent;
+	pointer-events: none;
+}
+.filterSliderDualTrack{
+	width: 100%;
+	height: 20px;
+	position: absolute;
+	margin: auto;
+	top: 0;
+	bottom: 0;
+	#border-radius: 5px;
+	background: #393f4cd1;
+}
+input[type="range"]::-webkit-slider-runnable-track{
+	-webkit-appearance: none;
+}
+input[type="range"]::-moz-range-track{
+	-moz-appearance: none;
+}
+input[type="range"]::-ms-track{
+	appearance: none;
+}
+
+
+/*Die Schieber*/
+input[type="range"]::-moz-range-thumb{
+	-webkit-appearance: none;
+	height: 20px;
+	width: 7px;
+	border-radius: 3px;
+	pointer-events: auto;
+}
+input[type="range"]::-ms-thumb{
+	appearance: none;
+	height: 20px;
+	width: 7px;
+	border-radius: 3px;
+	pointer-events: auto;
+}
+input[type="range"]::-webkit-slider-thumb{
+	-webkit-appearance: none;
+	height: 20px;
+	width: 7px;
+	border-radius: 3px;
+	pointer-events: auto;
+}
+
+/*Die Anzeige*/
+#filterSpeedGauge{
+	text-align: center;
+}
+
+/*Performancebars*/
+.loadbar{
+	background: rgba(57, 63, 76, 0.82);
+	text-align: center;
 }
 
 /*Disable mobile mode Elements*/
@@ -345,13 +1015,13 @@ i.fa-undo-alt{
 	width:100%;
 	background: #2b72d7;
 	color: white;
-	font-size: 32px;
+	font-size: 24px;
 	padding: 5px;
 	text-align:center;
 }
 
 .navbar#navbarMobile i{
-	font-size:48px;
+	font-size:32px;
 }
 
 .navbar#navbarMobile .fa-bars{
@@ -375,7 +1045,7 @@ i.fa-undo-alt{
 	z-index:99999;
 	background: gray;
 	width:100%;
-	top: 58px;
+	top: 42px;
 	bottom:0px;
 	grid-template-columns: 1fr 1fr 1fr;
 }
@@ -441,6 +1111,115 @@ i.fa-undo-alt{
 	#animation-direction: alternate;
 }
 
+.mlat-compass{
+	color: orange;
+}
+
+.nomlat-compass{
+	color: #b7b7b7;
+}
+
+/* fullscreenoverlay */
+.centeroverlay{
+	display: none;
+	position: fixed;
+	z-index: 999;
+	top: 75px;
+	left: 75px;
+	background: #393f4cd1;
+	padding: 10px;
+	border-radius: 5px;
+	color: white;
+	width: calc(100% - 175px);
+	height: calc(100% - 175px);	
+}
+
+.centeroverlayClose{
+	float: right;
+	font-size: 24px;
+}
+
+.centeroverlayContent{
+	overflow-x: hidden;
+	overflow-y: auto;
+	height: 100%;
+	#width: 100%;
+	padding-left: 30px;
+	padding-right: 10px;
+}
+
+/* corneroverlay */
+/* fullscreenoverlay */
+#corneroverlay{
+	display: none;
+	position: fixed;
+	z-index: 999;
+	bottom: 75px;
+	left: 5px;
+	color: white;
+	min-width: 250px;
+	min-height: 50px;
+	max-width: calc(100% - 175px);
+	max-height: calc(100% - 175px);	
+}
+
+.centeroverlay h1{
+	text-align: center;
+}
+
+.centeroverlay a{
+	color: orange;
+}
+
+#corneroverlayHeadline{
+	padding: 10px;
+	background: #2b72d7;
+	text-align: center;
+	font-weight: bold;
+}
+
+.corneroverlayHeadlineCrit{
+	background: #f00 !important;
+}
+
+#corneroverlayHeadline i{
+	float: left;
+}
+
+#corneroverlayHeadline i.fa-window-close{
+	float: right;
+}
+
+#corneroverlayContent{
+	padding: 10px;
+	border: solid 1px #2b72d7;
+	background: #393f4cd1;
+}
+
+.corneroverlayContentCrit{
+	border: solid 1px #f00 !important;
+}
+
+.aboutSectionGrid{
+	display: grid;
+	gap: 2rem;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	border-top: solid 1px;
+	margin-bottom: 50px;
+}
+
+.aboutSection{
+	border-bottom: solid 1px;
+}
+
+.aboutSection h2{
+	margin-bottom: 5px;
+	text-decoration: underline
+}
+
+.aboutSection h3{
+	margin-bottom: 0px;
+}
 /*Map*/
 
 /*Modeswitch*/
@@ -458,9 +1237,25 @@ i.fa-undo-alt{
 		width:100%;
 		left: 0px;
 		padding:0px;
-		padding-top:60px;
+		padding-top:44px;
 		#top:50px;
+		height: calc(100% - 60px);
+		z-index: 9999;
 	}
+	.centeroverlay{
+		display: none;
+		position: fixed;
+		z-index: 999;
+		top: 44px;
+		left: 2px;
+		background: #393f4cd1;
+		padding: 10px;
+		border-radius: 5px;
+		color: white;
+		width: calc(100% - 24px);
+		height: calc(100% - 85px);	
+	}
+
 }
 
 @keyframes bcp{
@@ -485,6 +1280,7 @@ i.fa-undo-alt{
 
 #rc3
 {
+    display: none;
     position:fixed;
     bottom:90px;
     left:-130px;
@@ -511,4 +1307,15 @@ i.fa-undo-alt{
    display: block;
    margin-left: auto;
    margin-right: auto;
+}
+/* tests */
+/*.leaflet-tile {*/
+.darktile .leaflet-tile{
+	filter: brightness(0.5) !important;
+}
+
+
+#attributionMarkers table{
+	overflow: auto;
+	overflow-x: auto !important;
 }
